@@ -83,7 +83,8 @@ java -jar target/java-libra-cli-1.0.0.jar
 
 ### References
 
-* web3j
-* web3j-spring-boot-starter
+* [jlibra](https://github.com/ketola/jlibra)
+* [web3j](https://github.com/web3j/web3j)
+* [web3j-spring-boot-starter](https://github.com/web3j/web3j-spring-boot-starter)
 * [Spring Shell 2.0.0](https://docs.spring.io/spring-shell/docs/2.0.0.M2/reference/htmlsingle/#_getting_started) 
-with [Spring Boot 2.0.0](https://docs.spring.io/spring-boot/docs/2.0.0.M5/reference/htmlsingle/) examples along with unit and integration tests.
+with [Spring Boot 2.0.0](https://docs.spring.io/spring-boot/docs/2.0.0.M5/reference/htmlsingle/) examples.
