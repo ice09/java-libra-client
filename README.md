@@ -10,14 +10,14 @@ Can be used standalone, but is more targeted for demostrating the usage of the l
 
 ### Use
 
-You can download the binaries here and head to paragraph `Run`.  
+You can [download the binaries](https://github.com/ice09/java-libra-client/releases/download/v0.0-alpha-1/java-libra-client-0.0-alpha-1.jar) and head to paragraph `Run`.  
 If you want to build an own application based on `jlibra` and `jlibra-spring-boot-starter` see paragraph `Build`.
 
 ### Run
 
 Run the downloaded binary with this command in a shell:
 ```
-java -jar java-libra-cli-1.0.0.jar
+java -jar java-libra-client-0.0-alpha-1.jar
 ```
 
 The application should start with a jlibra splash screen and a shell.  
