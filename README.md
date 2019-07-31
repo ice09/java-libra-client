@@ -71,6 +71,8 @@ jlibra.max-gas-amount=600000
 * Build jlibra with `mvn clean install`
 * Clone `jlibra-spring-boot-starter` repo: `git clone https://github.com/ice09/jlibra-spring-boot-starter`
 * Build jlibra-spring-boot-starter with `mvn clean install`
+* Clone `libra-message-signing` repo: `git clone https://github.com/ice09/libra-message-signing`
+* Build libra-message-signing with `mvn clean install`
 * Clone this repo: `git clone https://github.com/ice09/java-libra-shell.git`
 * Build java-libra-shell with `mvn clean package`
 
