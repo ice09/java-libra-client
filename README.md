@@ -67,9 +67,9 @@ jlibra.max-gas-amount=10000
 
 ### Build
 
-* Clone `jlibra` repo with `api-demo` branch: `git clone -b api-demo https://github.com/ketola/jlibra.git`
+* Clone `jlibra` repo: `git clone -b api-demo https://github.com/ketola/jlibra.git`
 * Build jlibra with `mvn clean install`
-* Clone this repo: `git clone https://github.com/ice09/java-spring-boot-starter.git`
+* Clone `jlibra-spring-boot-starter` repo: `git clone https://github.com/ice09/jlibra-spring-boot-starter`
 * Build jlibra-spring-boot-starter with `mvn clean install`
 * Clone this repo: `git clone https://github.com/ice09/java-libra-shell.git`
 * Build java-libra-shell with `mvn clean package`

@@ -22,8 +22,8 @@ public class QueryCommand {
     private AccountStateQuery accountStateQuery;
 
     @ShellMethod(key = {"query balance", "query b", "q balance", "q b"}, value = "Get the current balance of an account.")
-    public void balance(int accountAddressOrIndex) {
-        UpdateToLatestLedgerResult result = accountStateQuery.queryBalance(wallet.getAccountAt(accountAddressOrIndex).getAddress());
+    public void balance(String accountAddressOrIndex) {
+        UpdateToLatestLedgerResult result = accountStateQuery.queryBalance(wallet.findLibraAccount(accountAddressOrIndex));
         result.getAccountStates().forEach(accountState -> {
             System.out.println();
             System.out.println("Address                 " + new String(Hex.encode(accountState.getAddress())));
@@ -38,18 +38,18 @@ public class QueryCommand {
     }
 
     @ShellMethod(key = {"query sequence", "query s", "q sequence", "q s"}, value = "Get the current sequence number for an account.")
-    public void sequence(int accountAddressOrIndex, boolean resetSequenceNumber) {
+    public void sequence(String accountAddressOrIndex, boolean resetSequenceNumber) {
         balance(accountAddressOrIndex);
     }
 
     @ShellMethod(key = {"query account_state", "query as", "q account_state", "q as"}, value = "Get the latest state for an account.")
-    public void accountState(int accountAddressOrIndex) {
+    public void accountState(String accountAddressOrIndex) {
         balance(accountAddressOrIndex);
     }
 
     @ShellMethod(key = {"query txn_acc_seq", "query ts", "q txn_acc_seq", "q ts"}, value = "Get the committed transaction by account and sequence number.")
-    public void txnAccSeq(int accountAddressOrIndex, BigInteger sequenceNumber, @ShellOption(defaultValue = "false") boolean fetchEvents) {
-        UpdateToLatestLedgerResult result = accountStateQuery.queryTransactionsBySequenceNumber(wallet.getAccountAt(accountAddressOrIndex).getAddress(), sequenceNumber.longValue());
+    public void txnAccSeq(String accountAddressOrIndex, BigInteger sequenceNumber, @ShellOption(defaultValue = "false") boolean fetchEvents) {
+        UpdateToLatestLedgerResult result = accountStateQuery.queryTransactionsBySequenceNumber(wallet.findLibraAccount(accountAddressOrIndex), sequenceNumber.longValue());
         result.getAccountTransactionsBySequenceNumber().forEach(tx -> {
             System.out.println("Sender public key: " + new String(Hex.encode(tx.getSenderPublicKey())));
             System.out.println("Sender signature: " + new String(Hex.encode(tx.getSenderSignature())));

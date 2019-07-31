@@ -2,6 +2,7 @@ package dev.jlibra.shell.commands.account;
 
 import dev.jlibra.JLibra;
 import dev.jlibra.shell.types.Wallet;
+import org.bouncycastle.util.encoders.Hex;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
@@ -46,11 +47,11 @@ public class AccountCommand {
     }
 
     @ShellMethod(key = {"account mint", "account m", "a mint", "a m"}, value = "Mint coins to the account.")
-    public void mint(int addressOrIndex, BigInteger amount) {
-        System.out.println(wallet.mint(addressOrIndex, amount, jLibra.getFaucetHost(), jLibra.getFaucetPort()));
+    public void mint(String addressOrIndex, BigInteger amount) {
+        System.out.println(wallet.mint(Hex.toHexString(wallet.findLibraAccount(addressOrIndex)), amount, jLibra.getFaucetHost(), jLibra.getFaucetPort()));
     }
 
     @ShellMethod(key = {"account mintb", "account mb", "a mintb", "a mb"}, value = "Mint coins to the account. Blocking.")
-    public void mintBlocking(int addressOrIndex, BigInteger amount) {
+    public void mintBlocking(String addressOrIndex, BigInteger amount) {
         mint(addressOrIndex, amount);
     }}

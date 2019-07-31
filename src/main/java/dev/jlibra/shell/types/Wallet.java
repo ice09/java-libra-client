@@ -13,9 +13,9 @@ import java.io.InputStreamReader;
 import java.math.BigInteger;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.charset.Charset;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
-import java.security.Security;
 import java.util.ArrayList;
 
 @Component
@@ -48,15 +48,14 @@ public class Wallet {
 
     public void createAccountFromMnemonic(String mnemonic, int child) {
         try {
-            Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
             Seed seed = new Seed(Mnemonic.fromString(mnemonic), "LIBRA");
             LibraKeyFactory libraKeyFactory = new LibraKeyFactory(seed);
             ExtendedPrivKey extendedPrivKey = libraKeyFactory.privateChild(new ChildNumber(child));
             String libraAddress = extendedPrivKey.getAddress();
             System.out.println();
             System.out.println("Recovered account from mnemonic with Libra address: " + libraAddress);
-            System.out.println("Public key  " + new String(Hex.encode(extendedPrivKey.publicKey.getData())));
-            System.out.println("Private key " + new String(Hex.encode(extendedPrivKey.privateKey.getData())));
+            System.out.println("Public key  " + new String(Hex.encode(extendedPrivKey.publicKey.getEncoded())));
+            System.out.println("Private key " + new String(Hex.encode(extendedPrivKey.privateKey.getEncoded())));
             System.out.println();
             accounts.add(new MnemonicAccount(extendedPrivKey));
         } catch (Exception ex) {
@@ -75,13 +74,20 @@ public class Wallet {
         System.out.println();
     }
 
+    public byte[] findLibraAccount(String indexOrAddress) {
+        if (indexOrAddress.length() > 12) {
+            return Hex.decode(indexOrAddress.getBytes(Charset.forName("UTF-8")));
+        } else {
+            return accounts.get(Integer.parseInt(indexOrAddress)).getAddress();
+        }
+    }
+
     public Account getAccountAt(int index) {
         return accounts.get(index);
     }
 
-    public String mint(int accountIndex, BigInteger amount, String url, int port) {
+    public String mint(String toAddress, BigInteger amount, String url, int port) {
         long amountInMicroLibras = amount.longValue() * 1_000_000L;
-        String toAddress = new String(Hex.encode(accounts.get(accountIndex).getAddress()));
 
         try {
             URL faucet = new URL(String.format("http://" + url + ":" + port + "?amount=%d&address=%s", amountInMicroLibras, toAddress));
