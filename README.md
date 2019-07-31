@@ -58,11 +58,11 @@ There are several properties that can be configured. The current complete list i
 
 ```
 jlibra.service-url=ac.testnet.libra.org
-jlibra.service-port=80
+jlibra.service-port=8000
 jlibra.faucet-url=faucet.testnet.libra.org
 jlibra.faucet-port=80
-jlibra.gas-unit-price=0
-jlibra.max-gas-amount=10000
+jlibra.gas-unit-price=5
+jlibra.max-gas-amount=600000
 ```
 
 ### Build
