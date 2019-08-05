@@ -1,9 +1,6 @@
 package dev.jlibra.shell.commands.transfer;
 
-import dev.jlibra.mnemonic.ExtendedPrivKey;
-import dev.jlibra.mnemonic.SecretKey;
 import dev.jlibra.shell.types.Account;
-import dev.jlibra.shell.types.AccountType;
 import dev.jlibra.shell.types.Wallet;
 import dev.jlibra.shell.util.KeyUtils;
 import dev.jlibra.spring.action.PeerToPeerTransfer;
