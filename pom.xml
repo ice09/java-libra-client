@@ -59,7 +59,11 @@
             <artifactId>spring-shell-starter</artifactId>
             <version>${spring.shell.version}</version>
         </dependency>
-
+        <dependency>
+            <groupId>com.konghq</groupId>
+            <artifactId>unirest-java</artifactId>
+            <version>2.3.14</version>
+        </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>

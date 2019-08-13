@@ -2,17 +2,15 @@ package dev.jlibra.shell.types;
 
 import dev.jlibra.KeyUtils;
 import dev.jlibra.mnemonic.*;
+import kong.unirest.HttpResponse;
+import kong.unirest.Unirest;
 import org.bouncycastle.jcajce.provider.asymmetric.edec.BCEdDSAPrivateKey;
 import org.bouncycastle.jcajce.provider.asymmetric.edec.BCEdDSAPublicKey;
 import org.bouncycastle.jcajce.provider.digest.SHA3;
 import org.bouncycastle.util.encoders.Hex;
 import org.springframework.stereotype.Component;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.math.BigInteger;
-import java.net.URL;
-import java.net.URLConnection;
 import java.nio.charset.Charset;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
@@ -89,18 +87,11 @@ public class Wallet {
     public String mint(String toAddress, BigInteger amount, String url, int port) {
         long amountInMicroLibras = amount.longValue() * 1_000_000L;
 
-        try {
-            URL faucet = new URL(String.format("http://" + url + ":" + port + "?amount=%d&address=%s", amountInMicroLibras, toAddress));
-            URLConnection uc = faucet.openConnection();
-            BufferedReader in = new BufferedReader(new InputStreamReader(uc.getInputStream()));
+        HttpResponse<String> response = Unirest.post("http://" + url + ":" + port)
+                .queryString("amount", amountInMicroLibras)
+                .queryString("address", toAddress)
+                .asString();
 
-            String inputLine;
-            while ((inputLine = in.readLine()) != null)
-                System.out.println(inputLine);
-            in.close();
-            return "OK";
-        } catch (Exception ex) {
-            return ex.getMessage();
-        }
+        return response.getBody();
     }
 }
