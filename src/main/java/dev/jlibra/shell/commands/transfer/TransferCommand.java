@@ -1,8 +1,8 @@
 package dev.jlibra.shell.commands.transfer;
 
+import dev.jlibra.KeyUtils;
 import dev.jlibra.shell.types.Account;
 import dev.jlibra.shell.types.Wallet;
-import dev.jlibra.util.ExtKeyUtils;
 import dev.jlibra.spring.action.PeerToPeerTransfer;
 import org.bouncycastle.util.encoders.Hex;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +11,8 @@ import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
 
 import java.math.BigInteger;
+import java.security.PrivateKey;
+import java.security.PublicKey;
 
 @ShellComponent
 public class TransferCommand {
@@ -25,7 +27,9 @@ public class TransferCommand {
     public void transfer(String senderAddressOrIndex, String receiverAddress, BigInteger amount, @ShellOption(defaultValue = "-1") BigInteger gasUnitPrice, @ShellOption(defaultValue = "-1") BigInteger maxGasAmount) {
         Account senderAccount = wallet.getAccountAt(Integer.parseInt(senderAddressOrIndex));
         receiverAddress = Hex.toHexString(wallet.findLibraAccount(receiverAddress));
-        PeerToPeerTransfer.PeerToPeerTransferReceipt receipt = peerToPeerTransfer.transferFunds(receiverAddress, amount.longValue() * 1_000_000, ExtKeyUtils.publicKeyFromBytes(senderAccount.getPublicKey()), ExtKeyUtils.privateKeyFromBytes(senderAccount.getPrivateKey()), gasUnitPrice.longValue(), maxGasAmount.longValue());
+        PublicKey publicKey = KeyUtils.publicKeyFromHexString(new String(Hex.encode(senderAccount.getPublicKey())));
+        PrivateKey privateKey = KeyUtils.privateKeyFromHexString(new String(Hex.encode(senderAccount.getPrivateKey())));
+        PeerToPeerTransfer.PeerToPeerTransferReceipt receipt = peerToPeerTransfer.transferFunds(receiverAddress, amount.longValue() * 1_000_000, publicKey, privateKey, gasUnitPrice.longValue(), maxGasAmount.longValue());
         System.out.println(receipt.getStatus());
     }
 

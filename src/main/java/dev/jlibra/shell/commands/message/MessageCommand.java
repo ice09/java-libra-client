@@ -1,10 +1,10 @@
 package dev.jlibra.shell.commands.message;
 
+import dev.jlibra.KeyUtils;
 import dev.jlibra.extension.signer.Signer;
 import dev.jlibra.extension.verifier.Verifier;
 import dev.jlibra.shell.types.Account;
 import dev.jlibra.shell.types.Wallet;
-import dev.jlibra.util.ExtKeyUtils;
 import org.bouncycastle.util.encoders.Hex;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.standard.ShellComponent;
@@ -23,7 +23,7 @@ public class MessageCommand {
     @ShellMethod(key = {"sign message", "sign m", "s message", "s m"}, value = "Sign the message with the private key of provided account.")
     public void signMessage(String message, int index) {
         Account account = wallet.getAccountAt(index);
-        PrivateKey pk = ExtKeyUtils.privateKeyFromBytes(account.getPrivateKey());
+        PrivateKey pk = KeyUtils.privateKeyFromHexString(new String(Hex.encode(account.getPrivateKey())));
         byte[] pkb = new byte[32];
         System.arraycopy(pk.getEncoded(), 16, pkb, 0, 32);
         System.out.println("\nSigned message is " + Hex.toHexString(Signer.signMessage(pkb, message.getBytes(Charset.forName("UTF-8")))) + "\n");
@@ -35,7 +35,7 @@ public class MessageCommand {
         int srcPos = 12;
         if (publicKeyOrIndex.length() <= 12) {
             Account account = wallet.getAccountAt(Integer.parseInt(publicKeyOrIndex));
-            PublicKey puk = ExtKeyUtils.publicKeyFromBytes(account.getPublicKey());
+            PublicKey puk = KeyUtils.publicKeyFromHexString(new String(Hex.encode(account.getPublicKey())));
             encodedPk = puk.getEncoded();
         } else {
             encodedPk = Hex.decode(publicKeyOrIndex);

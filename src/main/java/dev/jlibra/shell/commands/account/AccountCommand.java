@@ -2,6 +2,7 @@ package dev.jlibra.shell.commands.account;
 
 import dev.jlibra.JLibra;
 import dev.jlibra.shell.types.Wallet;
+import dev.jlibra.util.JLibraUtil;
 import org.bouncycastle.util.encoders.Hex;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.standard.ShellComponent;
@@ -19,6 +20,9 @@ public class AccountCommand {
 
     @Autowired
     private JLibra jLibra;
+
+    @Autowired
+    private JLibraUtil jLibraUtil;
 
     @ShellMethod(key = {"account create", "account c", "a create", "a c"}, value = "Create a random account with private/public key pair. Account information will be held in memory only. The created account will not be saved to the chain.")
     public void create() {
@@ -48,7 +52,7 @@ public class AccountCommand {
 
     @ShellMethod(key = {"account mint", "account m", "a mint", "a m"}, value = "Mint coins to the account.")
     public void mint(String addressOrIndex, BigInteger amount) {
-        System.out.println(wallet.mint(Hex.toHexString(wallet.findLibraAccount(addressOrIndex)), amount, jLibra.getFaucetHost(), jLibra.getFaucetPort()));
+        System.out.println(jLibraUtil.mint(Hex.toHexString(wallet.findLibraAccount(addressOrIndex)), amount.longValue()));
     }
 
     @ShellMethod(key = {"account mintb", "account mb", "a mintb", "a mb"}, value = "Mint coins to the account. Blocking.")

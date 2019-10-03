@@ -2,15 +2,12 @@ package dev.jlibra.shell.types;
 
 import dev.jlibra.KeyUtils;
 import dev.jlibra.mnemonic.*;
-import kong.unirest.HttpResponse;
-import kong.unirest.Unirest;
 import org.bouncycastle.jcajce.provider.asymmetric.edec.BCEdDSAPrivateKey;
 import org.bouncycastle.jcajce.provider.asymmetric.edec.BCEdDSAPublicKey;
 import org.bouncycastle.jcajce.provider.digest.SHA3;
 import org.bouncycastle.util.encoders.Hex;
 import org.springframework.stereotype.Component;
 
-import java.math.BigInteger;
 import java.nio.charset.Charset;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
@@ -84,14 +81,4 @@ public class Wallet {
         return accounts.get(index);
     }
 
-    public String mint(String toAddress, BigInteger amount, String url, int port) {
-        long amountInMicroLibras = amount.longValue() * 1_000_000L;
-
-        HttpResponse<String> response = Unirest.post("http://" + url + ":" + port)
-                .queryString("amount", amountInMicroLibras)
-                .queryString("address", toAddress)
-                .asString();
-
-        return response.getBody();
-    }
 }

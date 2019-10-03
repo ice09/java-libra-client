@@ -25,15 +25,17 @@ public class QueryCommand {
     public void balance(String accountAddressOrIndex) {
         UpdateToLatestLedgerResult result = accountStateQuery.queryBalance(wallet.findLibraAccount(accountAddressOrIndex));
         result.getAccountStates().forEach(accountState -> {
-            System.out.println();
-            System.out.println("Address                 " + new String(Hex.encode(accountState.getAddress())));
-            System.out.println("Received events         " + accountState.getReceivedEvents());
-            System.out.println("Sent events             " + accountState.getSentEvents());
-            System.out.println("Balance (microLibras)   " + accountState.getBalanceInMicroLibras());
-            System.out.println("Balance (Libras)        "
-                    + new BigDecimal(accountState.getBalanceInMicroLibras()).divide(BigDecimal.valueOf(1000000)));
-            System.out.println("Sequence number         " + accountState.getSequenceNumber());
-            System.out.println();
+            if (new BigInteger(accountState.getAuthenticationKey()).bitLength() > 0) {
+                System.out.println();
+                System.out.println("Address                 " + new String(Hex.encode(accountState.getAuthenticationKey())));
+                System.out.println("Received events         " + accountState.getReceivedEvents().getCount());
+                System.out.println("Sent events             " + accountState.getSentEvents().getCount());
+                System.out.println("Balance (microLibras)   " + accountState.getBalanceInMicroLibras());
+                System.out.println("Balance (Libras)        "
+                        + new BigDecimal(accountState.getBalanceInMicroLibras()).divide(BigDecimal.valueOf(1000000)));
+                System.out.println("Sequence number         " + accountState.getSequenceNumber());
+                System.out.println();
+            }
         });
     }
 
@@ -51,12 +53,9 @@ public class QueryCommand {
     public void txnAccSeq(String accountAddressOrIndex, BigInteger sequenceNumber, @ShellOption(defaultValue = "false") boolean fetchEvents) {
         UpdateToLatestLedgerResult result = accountStateQuery.queryTransactionsBySequenceNumber(wallet.findLibraAccount(accountAddressOrIndex), sequenceNumber.longValue());
         result.getAccountTransactionsBySequenceNumber().forEach(tx -> {
-            System.out.println("Sender public key: " + new String(Hex.encode(tx.getSenderPublicKey())));
-            System.out.println("Sender signature: " + new String(Hex.encode(tx.getSenderSignature())));
-
             tx.getEvents().forEach(e -> {
                 System.out
-                        .println(new String(Hex.encode(e.getAddress())) + " " + e.getEventPath().getEventType()
+                        .println(new String(Hex.encode(e.getAccountAddress())) + " " + e.getSequenceNumber()
                                 + " Amount: " + e.getAmount());
             });
 
